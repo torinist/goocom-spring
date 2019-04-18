@@ -13,8 +13,11 @@ import org.springframework.web.multipart.MultipartFile;
 import com.torinist.goocom.dto.BookCsvUpdatedDto;
 import com.torinist.goocom.entity.BookEntity;
 import com.torinist.goocom.entity.CircleEntity;
+import com.torinist.goocom.entity.CsvUpdatedEntity;
 import com.torinist.goocom.repository.BookRepository;
 import com.torinist.goocom.repository.CircleRepository;
+import com.torinist.goocom.repository.CsvUpdatedRepository;
+import com.torinist.goocom.util.StringUtils;
 import com.torinist.goocom.util.exception.LogicException;
 
 /**
@@ -33,16 +36,26 @@ public class CsvService {
 	@Autowired
 	BookRepository bookRepository;
 
+	@Autowired
+	CsvUpdatedRepository csvUpdatedRepository;
+
 	/**
 	 * 本一覧、サークル一覧をCSVから取得する.
 	 * 
-	 * @param eventYear イベント年
+	 * @param eventDate イベント年月日
 	 * @param file CSVファイル
 	 * @return 登録した本のレコード数
 	 * @throws LogicException ファイル読み込みに失敗
 	 */
-	public int uploadCsvBooks(String eventYear, MultipartFile file) throws LogicException {
+	public int uploadCsvBooks(String eventDate, MultipartFile file) throws LogicException {
 		List<BookCsvUpdatedDto> dtos = new ArrayList<>();
+
+		// eventDateから年だけ取得する
+		String eventYear = StringUtils.getStringYear(eventDate);
+
+		// CSV更新情報を登録する
+		CsvUpdatedEntity csvUpdatedEntity = insertCsvUpdated(eventDate);
+
 		// CSVを読み込む
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream(), "utf-8"))) {
 			String str;
@@ -68,8 +81,47 @@ public class CsvService {
 		}
 
 		// 本とサークルをアップロードする
-		return uploadBookCsvUpdatedDtos(dtos);
+		int bookCount = uploadBookCsvUpdatedDtos(dtos);
+		
+		// CSVを更新する
+		updateCsvUpdated(csvUpdatedEntity);
+		
+		return bookCount;
 
+	}
+
+	/**
+	 * CSV更新情報を登録する.
+	 * 
+	 * @param eventDate イベント年月日
+	 * @return 登録したCSV更新情報
+	 */
+	CsvUpdatedEntity insertCsvUpdated(String eventDate) {
+		CsvUpdatedEntity entity;
+		// eventDateを検索する
+		List<CsvUpdatedEntity> entities = csvUpdatedRepository.findByUpdatedTabNameLikeOrderByIdAsc(eventDate);
+		if (entities.isEmpty()) {
+			// 取得出来なかったら登録する
+			entity = new CsvUpdatedEntity();
+			entity.setUpdatedTabName(eventDate);
+			entity.setUpdatedFlg(false);
+			entity = csvUpdatedRepository.save(entity);
+		} else {
+			// 取得出来たらそれを返す
+			entity = entities.get(0);
+		}
+		return entity;
+	}
+
+	/**
+	 * CSV更新情報を更新する.
+	 * 
+	 * @param entity 登録したCSV更新情報
+	 * @return 更新したCSV更新情報
+	 */
+	CsvUpdatedEntity updateCsvUpdated(CsvUpdatedEntity entity) {
+		entity.setUpdatedFlg(true);
+		return csvUpdatedRepository.save(entity);
 	}
 
 	/**

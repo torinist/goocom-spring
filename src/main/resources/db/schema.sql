@@ -32,3 +32,13 @@ CREATE TABLE IF NOT EXISTS book (
 	FOREIGN KEY(circle_id) REFERENCES circle(id),
 	FOREIGN KEY(genre_id) REFERENCES genre(id)
 );
+
+DROP TABLE csv_updated;
+CREATE TABLE IF NOT EXISTS csv_updated (
+	id INT PRIMARY KEY auto_increment,
+	updated_tab_name VARCHAR(10) NOT NULL,
+	updated_flg TINYINT NOT NULL DEFAULT 0,
+	updated_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
+	created_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
+	version INT NOT NULL DEFAULT 0
+);
