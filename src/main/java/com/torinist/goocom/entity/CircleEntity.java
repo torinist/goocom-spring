@@ -25,6 +25,8 @@ public class CircleEntity {
 
 	private String name;
 
+	private String writer;
+
 	@Column(name = "updated_time")
 	private Date updatedTime;
 

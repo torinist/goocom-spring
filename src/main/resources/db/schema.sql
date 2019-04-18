@@ -2,6 +2,8 @@ DROP TABLE circle;
 CREATE TABLE IF NOT EXISTS circle (
 	id INT PRIMARY KEY auto_increment,
 	name VARCHAR(100) NOT NULL,
+	writer VARCHAR(100),
+	sns_url VARCHAR(200),
 	updated_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
 	created_time TIMESTAMP NOT NULL DEFAULT current_timestamp,
 	version INT NOT NULL DEFAULT 0
