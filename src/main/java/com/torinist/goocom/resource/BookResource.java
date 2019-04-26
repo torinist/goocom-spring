@@ -14,7 +14,7 @@ import lombok.Setter;
 public class BookResource {
 
 	/** 本ID */
-	private int id;
+	private Integer id;
 
 	/** 本タイトル */
 	private String name;
@@ -23,16 +23,16 @@ public class BookResource {
 	private String fileData;
 
 	/** サークルID */
-	private int circleId;
+	private Integer circleId;
 
 	/** サークル名 */
 	private String circleName;
 
 	/** 発行年 */
-	private int issueYear;
+	private Integer issueYear;
 
 	/** ジャンルID */
-	private int genreId;
+	private Integer genreId;
 
 	/** ジャンル名 */
 	private String genreName;

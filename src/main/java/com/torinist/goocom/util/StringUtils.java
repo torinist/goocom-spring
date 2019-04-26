@@ -1,6 +1,6 @@
 package com.torinist.goocom.util;
 
-public class StringUtils {
+public class StringUtils extends org.springframework.util.StringUtils {
 
 	private static final int DATE_FORMAT_LENGTH = 8;
 

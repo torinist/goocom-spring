@@ -8,12 +8,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.torinist.goocom.controller.common.BaseController;
@@ -22,7 +22,7 @@ import com.torinist.goocom.service.BookService;
 import com.torinist.goocom.service.CsvService;
 import com.torinist.goocom.util.exception.LogicException;
 
-@Controller
+@RestController
 @RequestMapping("/book")
 public class BookController implements BaseController<BookResource, Integer> {
 
@@ -52,8 +52,7 @@ public class BookController implements BaseController<BookResource, Integer> {
 	@Override
 	@PostMapping("/search")
 	public List<BookResource> search(BookResource resource) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		return bookService.search(resource);
 	}
 
 	@Override

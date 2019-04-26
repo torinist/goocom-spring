@@ -10,7 +10,7 @@ import lombok.Setter;
 public class GenreResource {
 
 	/** ジャンルID */
-	private int id;
+	private Integer id;
 
 	/** ジャンル名 */
 	private String name;

@@ -3,6 +3,7 @@ package com.torinist.goocom.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import com.torinist.goocom.entity.CircleEntity;
 
@@ -12,7 +13,7 @@ import com.torinist.goocom.entity.CircleEntity;
  * @author
  *
  */
-public interface CircleRepository extends JpaRepository<CircleEntity, Integer> {
+public interface CircleRepository extends JpaRepository<CircleEntity, Integer>, JpaSpecificationExecutor<CircleEntity> {
 
 	/**
 	 * 指定された名前の部分一致を行う.<br>

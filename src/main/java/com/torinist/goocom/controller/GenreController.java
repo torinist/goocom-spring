@@ -42,8 +42,7 @@ public class GenreController implements BaseController<GenreResource, Integer> {
 	@Override
 	@PostMapping("/search")
 	public List<GenreResource> search(GenreResource resource) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		return genreService.search(resource);
 	}
 
 	@Override

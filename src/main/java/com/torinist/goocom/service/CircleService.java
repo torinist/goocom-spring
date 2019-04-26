@@ -1,15 +1,16 @@
 package com.torinist.goocom.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.torinist.goocom.entity.CircleEntity;
 import com.torinist.goocom.repository.CircleRepository;
 import com.torinist.goocom.resource.CircleResource;
 import com.torinist.goocom.service.common.BaseServiceInterface;
+import com.torinist.goocom.service.specification.CircleSpecifications;
 import com.torinist.goocom.util.BeanUtils;
 
 /**
@@ -55,14 +56,14 @@ public class CircleService implements BaseServiceInterface<CircleResource> {
 	}
 
 	/**
-	 * 指定された<名前>に部分一致するサークルのリストを返す.
+	 * 指定された<サークル名>や<サークル主>に部分一致するサークルのリストを返す.
 	 */
 	@Override
 	public List<CircleResource> search(CircleResource resource) {
-		if (resource == null) {
-			return new ArrayList<CircleResource>();
-		}
-		List<CircleEntity> entities = circleRepository.findByNameContainingOrderByIdAsc(resource.getName());
+		CircleSpecifications circleSpecifications = new CircleSpecifications();
+		List<CircleEntity> entities = circleRepository.findAll(
+			Specification.where(circleSpecifications.nameContains(resource.getName()).and(
+				circleSpecifications.writerContains(resource.getWriter()))));
 		return BeanUtils.newInstanceCopyList(entities, CircleResource.class);
 	}
 

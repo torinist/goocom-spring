@@ -3,12 +3,14 @@ package com.torinist.goocom.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import com.torinist.goocom.entity.BookEntity;
 import com.torinist.goocom.repository.BookRepository;
 import com.torinist.goocom.resource.BookResource;
 import com.torinist.goocom.service.common.BaseServiceInterface;
+import com.torinist.goocom.service.specification.BookSpecifications;
 import com.torinist.goocom.util.BeanUtils;
 
 /**
@@ -53,11 +55,14 @@ public class BookService implements BaseServiceInterface<BookResource> {
 		return BeanUtils.newInstanceCopyProperties(entity, BookResource.class);
 	}
 
-
 	@Override
 	public List<BookResource> search(BookResource resource) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
+		BookSpecifications bookSpecifications = new BookSpecifications();
+		List<BookEntity> entities = bookRepository.findAll(
+			Specification.where(bookSpecifications.nameContains(resource.getName()).and(
+				bookSpecifications.circleIdContains(resource.getCircleId())
+						.and(bookSpecifications.genreIdContains(resource.getGenreId())))));
+		return BeanUtils.newInstanceCopyList(entities, BookResource.class);
 	}
 
 	@Override

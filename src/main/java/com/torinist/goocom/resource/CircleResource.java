@@ -10,7 +10,7 @@ import lombok.Setter;
 public class CircleResource {
 
 	/** サークルID */
-	private int id;
+	private Integer id;
 
 	/** サークル名 */
 	private String name;
